@@ -1,12 +1,42 @@
-API sencilla de Login con FastAPI# API de Login con FastAPI
+# API de Login con FastAPI
 
-##  Descripción
-API REST sencilla que permite autenticar usuarios usando FastAPI y SQLModel con una base de datos en memoria.
+API de autenticación usando FastAPI y SQLModel con base de datos local embebida en código.
 
-##  Requisitos
+## Requisitos
 - Python 3.10+
 
-##  Instalación
-
-```bash
+## Instalación
 pip install -r requirements.txt
+
+## Ejecución
+uvicorn main:app --reload
+
+La API estará disponible en: http://127.0.0.1:8000  
+Documentación interactiva en: http://127.0.0.1:8000/docs
+
+## Endpoint
+
+### POST /iniciar-sesion
+
+**Body:**
+{
+  "nombre_usuario": "admin",
+  "contrasena": "admin"
+}
+
+**Respuesta exitosa (200):**
+{
+  "mensaje": "Inicio de sesión exitoso",
+  "usuario": "admin"
+}
+
+**Respuesta fallida (401):**
+{
+  "detail": "Usuario o contraseña incorrectos"
+}
+
+## Usuarios de prueba
+/// nombre_usuario /// contraseña ///
+///   admin        ///admin        ///
+///   usuario      ///usuario     ///
+///   invitado     ///invitado    ///
