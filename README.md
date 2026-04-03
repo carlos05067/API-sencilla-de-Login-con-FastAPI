@@ -36,8 +36,5 @@ Documentación interactiva en: http://127.0.0.1:8000/docs
 }
 
 ## Usuarios de prueba
-| nombre_usuario | contrasena |
-|----------------|------------|
-| admin          | admin      |
-| usuario        | usuario    |
-| invitado       | invitado   |
+nombres: admin,user,guest 
+contraseñas: admin,user,guest
