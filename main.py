@@ -1,32 +1,23 @@
-from fastapi import FastAPI, HTTPException
-from sqlmodel import SQLModel, Field, Session, create_engine, select
-
+from fastapi import FastAPI,HTTPException
+from sqlmodel import SQLModel
 app = FastAPI()
-engine = create_engine("sqlite:///./database.db")
 
-class User(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+class User(SQLModel):
     username: str
     password: str
 
-class LoginRequest(SQLModel):
-    username: str
-    password: str
+db_users=[User(username="admin",password="admin"),
+          User(username="user",password="admin"),
+          User(username="guest",password="guest")]
 
-@app.on_event("startup")
-def startup():
-    SQLModel.metadata.create_all(engine)
-    with Session(engine) as s:
-        if not s.exec(select(User).where(User.username == "admin")).first():
-            s.add(User(username="admin", password="admin"))
-            s.add(User(username="user", password="user"))
-            s.add(User(username="guest", password="guest"))
-            s.commit()
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
 
 @app.post("/login")
-def login(data: LoginRequest):
-    with Session(engine) as s:
-        user = s.exec(select(User).where(User.username == data.username)).first()
-        if not user or user.password != data.password:
-            raise HTTPException(401, "Usuario o contraseña incorrectos")
-        return {"message": "Login exitoso", "username": user.username}
+def login(user: User):
+    for db_user in db_users:
+        if db_user.username == user.username and db_user.password == user.password:
+            return {"status": "success", "message": f"Bienvenido, {user.username}!"}
+    raise HTTPException(status_code=401, detail="Usuario o contraseña incorrectos")
